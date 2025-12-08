@@ -1,0 +1,35 @@
+{
+  "uuid": 1,
+  "type": "demo",
+  "title": "写一个适合5岁小孩儿玩的贪吃蛇游戏，可以安装在pad上玩的",
+  "model": {
+    "displayName": "智能选择",
+    "modelId": "auto",
+    "requestType": "",
+    "mode": "NORMAL"
+  },
+  "knowledgeList": [],
+  "prompt": "写一个适合5岁小孩儿玩的贪吃蛇游戏，可以安装在pad上玩的",
+  "displayQuery": "写一个适合5岁小孩儿玩的贪吃蛇游戏，可以安装在pad上玩的",
+  "agent": {
+    "agentId": 12,
+    "agentName": "Spec",
+    "agentImage": "spec",
+    "description": "一个由 Spec 驱动的AI Agent，善于在严肃编程场景中工作",
+    "strategy": "DEFAULT",
+    "tools": [],
+    "canInvokeAgents": false,
+    "visibility": "INVISIBLE",
+    "allowInvocation": true,
+    "subAgents": [],
+    "reportAgentName": "Spec",
+    "canUseMcp": true,
+    "enable": true,
+    "errors": [],
+    "order": 0,
+    "parentAgents": [],
+    "subagents": []
+  },
+  "isSpec": true,
+  "status": "done"
+}

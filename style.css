@@ -1,0 +1,270 @@
+/* 儿童贪吃蛇游戏样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    touch-action: manipulation;
+}
+
+.game-container {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 500px;
+    width: 100%;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-header h1 {
+    color: #FF6B6B;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.score-board {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    font-size: 1.2em;
+}
+
+.score, .high-score {
+    padding: 10px 20px;
+    border-radius: 15px;
+    background: #FFD93D;
+    color: #333;
+    font-weight: bold;
+}
+
+.score {
+    background: #4ECDC4;
+    color: white;
+}
+
+.high-score {
+    background: #FF6B6B;
+    color: white;
+}
+
+.game-canvas-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+#gameCanvas {
+    border: 3px solid #FFD93D;
+    border-radius: 10px;
+    background: #F8F9FA;
+}
+
+.game-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.direction-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.horizontal-controls {
+    display: flex;
+    gap: 60px;
+}
+
+.control-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 2em;
+    border: none;
+    border-radius: 50%;
+    background: #6C5CE7;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.control-btn.up { background: #00CEC9; }
+.control-btn.down { background: #FD79A8; }
+.control-btn.left { background: #FDCB6E; }
+.control-btn.right { background: #74B9FF; }
+
+.action-controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.action-btn {
+    padding: 15px 25px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 25px;
+    background: #00B894;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+}
+
+.action-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.action-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.action-btn.start { background: #00B894; }
+.action-btn.pause { background: #FDCB6E; color: #333; }
+.action-btn.reset { background: #FF7675; }
+
+.speed-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.speed-btn {
+    padding: 10px 20px;
+    border: 2px solid #6C5CE7;
+    border-radius: 20px;
+    background: white;
+    color: #6C5CE7;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+}
+
+.speed-btn.active {
+    background: #6C5CE7;
+    color: white;
+}
+
+.speed-btn:active {
+    transform: scale(0.95);
+}
+
+.game-history {
+    margin-top: 20px;
+    padding: 15px;
+    background: #F8F9FA;
+    border-radius: 15px;
+    border: 2px solid #FFD93D;
+}
+
+.game-history h3 {
+    color: #FF6B6B;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.history-list {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 8px 12px;
+    margin: 5px 0;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid #4ECDC4;
+    font-size: 0.9em;
+}
+
+.history-item.improved {
+    border-left-color: #00B894;
+    background: #E8F5E8;
+}
+
+.history-item.declined {
+    border-left-color: #FF7675;
+    background: #FFEEEE;
+}
+
+/* iPad 适配 */
+@media (max-width: 768px) {
+    .game-container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .game-header h1 {
+        font-size: 2em;
+    }
+    
+    .control-btn {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8em;
+    }
+    
+    .action-btn {
+        padding: 12px 20px;
+        font-size: 1.1em;
+    }
+}
+
+/* 防止文本选择 */
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* 动画效果 */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+    40% {transform: translateY(-10px);}
+    60% {transform: translateY(-5px);}
+}
+
+.bounce {
+    animation: bounce 0.6s;
+}
+
+@keyframes flash {
+    0%, 50%, 100% {opacity: 1;}
+    25%, 75% {opacity: 0.5;}
+}
+
+.flash {
+    animation: flash 0.5s;
+}
