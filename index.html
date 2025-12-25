@@ -17,40 +17,54 @@
             </div>
         </div>
 
-        <div class="game-canvas-container">
-            <canvas id="gameCanvas" width="450" height="450"></canvas>
-        </div>
+        <div class="game-main-content">
+            <div class="game-canvas-container">
+                <canvas id="gameCanvas" width="550" height="550"></canvas>
+            </div>
 
-        <div class="game-controls">
-            <div class="direction-controls">
-                <button class="control-btn up" id="upBtn">↑</button>
-                <div class="horizontal-controls">
-                    <button class="control-btn left" id="leftBtn">←</button>
-                    <button class="control-btn right" id="rightBtn">→</button>
+            <div class="game-controls-section">
+                <div class="game-controls">
+                    <div class="direction-controls">
+                        <button class="control-btn up" id="upBtn">↑</button>
+                        <div class="horizontal-controls">
+                            <button class="control-btn left" id="leftBtn">←</button>
+                            <button class="control-btn right" id="rightBtn">→</button>
+                        </div>
+                        <button class="control-btn down" id="downBtn">↓</button>
+                    </div>
+
+                    <div class="action-controls">
+                        <button class="action-btn start" id="startBtn">开始游戏</button>
+                        <button class="action-btn pause" id="pauseBtn" disabled>暂停</button>
+                        <button class="action-btn end" id="endBtn">结束</button>
+                    </div>
+
+                    <div class="speed-controls">
+                        <span>速度:</span>
+                        <button class="speed-btn active" data-speed="verySlow">很慢</button>
+                        <button class="speed-btn" data-speed="slow">慢</button>
+                        <button class="speed-btn" data-speed="medium">中</button>
+                        <button class="speed-btn" data-speed="fast">快</button>
+                    </div>
                 </div>
-                <button class="control-btn down" id="downBtn">↓</button>
-            </div>
 
-            <div class="action-controls">
-                <button class="action-btn start" id="startBtn">开始游戏</button>
-                <button class="action-btn pause" id="pauseBtn" disabled>暂停</button>
-                <button class="action-btn reset" id="resetBtn">重新开始</button>
-            </div>
-
-            <div class="speed-controls">
-                <span>速度:</span>
-                <button class="speed-btn" data-speed="slow">慢</button>
-                <button class="speed-btn active" data-speed="medium">中</button>
-                <button class="speed-btn" data-speed="fast">快</button>
+                <div class="game-history">
+                    <h3>游戏记录</h3>
+                    <div id="historyList" class="history-list"></div>
+                </div>
             </div>
         </div>
-
-        <div class="game-history">
-            <h3>游戏记录</h3>
-            <div id="historyList" class="history-list"></div>
         </div>
     </div>
 
-    <script src="game.js"></script>
+    <script src="game.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM已完全加载');
+        });
+        window.addEventListener('load', () => {
+            console.log('所有资源已加载');
+        });
+    </script>
 </body>
 </html>

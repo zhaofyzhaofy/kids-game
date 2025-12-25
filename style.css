@@ -20,10 +20,11 @@ body {
 .game-container {
     background: white;
     border-radius: 20px;
-    padding: 20px;
+    padding: 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    max-width: 500px;
+    max-width: 1000px;
     width: 100%;
+    min-height: 700px;
 }
 
 .game-header {
@@ -48,38 +49,58 @@ body {
 .score, .high-score {
     padding: 10px 20px;
     border-radius: 15px;
-    background: #FFD93D;
-    color: #333;
+    background: #FF9800;  /* 修改为需求文档指定的分数颜色 */
+    color: white;
     font-weight: bold;
 }
 
 .score {
-    background: #4ECDC4;
+    background: #FF9800;  /* 修改为需求文档指定的分数颜色 */
     color: white;
 }
 
 .high-score {
-    background: #FF6B6B;
+    background: #E91E63;  /* 修改为需求文档指定的最高分颜色 */
     color: white;
+}
+
+.game-main-content {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    align-items: flex-start;
 }
 
 .game-canvas-container {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    flex: 2;
 }
 
 #gameCanvas {
     border: 3px solid #FFD93D;
     border-radius: 10px;
-    background: #F8F9FA;
+    background: #F5F5F5;
+    width: 550px;
+    height: 550px;
+}
+
+.game-controls-section {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 350px;
+    gap: 25px;
 }
 
 .game-controls {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: center;
+    padding: 15px;
+    background: #F8F9FA;
+    border-radius: 15px;
+    border: 2px solid #E0E0E0;
 }
 
 .direction-controls {
@@ -93,14 +114,13 @@ body {
     display: flex;
     gap: 60px;
 }
-
 .control-btn {
-    width: 80px;
-    height: 80px;
-    font-size: 2em;
+    width: 100px;
+    height: 100px;
+    font-size: 2.5em;
     border: none;
     border-radius: 50%;
-    background: #6C5CE7;
+    background: #2196F3;
     color: white;
     cursor: pointer;
     transition: all 0.2s;
@@ -108,11 +128,27 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    touch-action: manipulation;
 }
 
-.control-btn:active {
+.control-btn:active, 
+.control-btn.active-touch {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: #1976D2;
+    opacity: 0.9;
+}
+
+/* 移动端触摸反馈 */
+@media (hover: none) {
+    .control-btn:active {
+        transition: transform 0.1s, opacity 0.1s;
+    }
+    
+    .action-btn:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+    }
 }
 
 .control-btn.up { background: #00CEC9; }
@@ -126,17 +162,19 @@ body {
     flex-wrap: wrap;
     justify-content: center;
 }
-
 .action-btn {
-    padding: 15px 25px;
-    font-size: 1.2em;
+    padding: 20px 30px;
+    font-size: 1.5em;
     border: none;
     border-radius: 25px;
-    background: #00B894;
+    background: #2196F3;
     color: white;
     cursor: pointer;
     transition: all 0.2s;
     font-weight: bold;
+    min-width: 120px;
+    text-align: center;
+    touch-action: manipulation;
 }
 
 .action-btn:disabled {
@@ -146,6 +184,7 @@ body {
 
 .action-btn:active:not(:disabled) {
     transform: scale(0.95);
+    background: #1976D2;  /* 添加需求文档指定的按钮激活颜色 */
 }
 
 .action-btn.start { background: #00B894; }
@@ -162,17 +201,17 @@ body {
 
 .speed-btn {
     padding: 10px 20px;
-    border: 2px solid #6C5CE7;
+    border: 2px solid #2196F3;  /* 修改为需求文档指定的按钮颜色 */
     border-radius: 20px;
     background: white;
-    color: #6C5CE7;
+    color: #2196F3;  /* 修改为需求文档指定的按钮颜色 */
     cursor: pointer;
     transition: all 0.2s;
     font-weight: bold;
 }
 
 .speed-btn.active {
-    background: #6C5CE7;
+    background: #2196F3;  /* 修改为需求文档指定的按钮颜色 */
     color: white;
 }
 
@@ -181,22 +220,33 @@ body {
 }
 
 .game-history {
-    margin-top: 20px;
-    padding: 15px;
+    padding: 20px;
     background: #F8F9FA;
     border-radius: 15px;
     border: 2px solid #FFD93D;
+    min-height: 200px;
 }
 
 .game-history h3 {
     color: #FF6B6B;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-align: center;
+    font-size: 1.4em;
 }
 
 .history-list {
-    max-height: 150px;
+    max-height: 250px;
     overflow-y: auto;
+    min-width: 320px;
+}
+
+.history-item {
+    padding: 12px 15px;
+    margin: 8px 0;
+    background: white;
+    border-radius: 10px;
+    border-left: 4px solid #4ECDC4;
+    font-size: 1em;
 }
 
 .history-item {
@@ -218,26 +268,68 @@ body {
     background: #FFEEEE;
 }
 
-/* iPad 适配 */
-@media (max-width: 768px) {
+/* 平板设备适配 */
+@media (max-width: 1024px) {
     .game-container {
         margin: 10px;
         padding: 15px;
+        max-width: 100%;
+        min-height: auto;
     }
     
     .game-header h1 {
-        font-size: 2em;
+        font-size: 2.2em;
+    }
+    
+    .game-main-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+        max-width: 500px;
+        max-height: 500px;
+    }
+    
+    .game-controls-section {
+        min-width: 100%;
+    }
+    
+    .game-controls {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .history-list {
+        min-width: auto;
     }
     
     .control-btn {
-        width: 70px;
-        height: 70px;
-        font-size: 1.8em;
+        width: 90px;
+        height: 90px;
+        font-size: 2.2em;
     }
     
     .action-btn {
-        padding: 12px 20px;
-        font-size: 1.1em;
+        padding: 15px 25px;
+        font-size: 1.3em;
+    }
+    
+    .horizontal-controls {
+        gap: 80px;
+    }
+}
+
+/* 横屏适配 */
+@media (min-width: 1024px) and (orientation: landscape) {
+    .game-main-content {
+        flex-direction: row;
+    }
+    
+    .game-controls-section {
+        flex-direction: column;
     }
 }
 

@@ -1,0 +1,36 @@
+# IDE配置
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 日志文件
+*.log
+
+# Python缓存
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 本地开发文件
+venv/
+env/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 临时文件
+*.tmp
+*.temp
+
+# 依赖文件
+package-lock.json
+yarn.lock
+
+# 确保GitHub Actions配置不被忽略
+!.github/workflows/

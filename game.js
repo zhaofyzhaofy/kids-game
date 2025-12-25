@@ -10,14 +10,15 @@ class GameState {
         this.score = 0;
         this.highScore = parseInt(localStorage.getItem('snakeHighScore')) || 0;
         this.isPlaying = false;
-        this.speedLevel = 'medium';
+        this.speedLevel = 'verySlow';
         this.gameHistory = JSON.parse(localStorage.getItem('snakeGameHistory')) || [];
         this.gameInterval = null;
         
         this.speedLevels = {
+            verySlow: 400,
             slow: 300,
             medium: 200,
-            fast: 100
+            fast: 150
         };
         
         this.colors = {
@@ -107,7 +108,7 @@ class GameState {
         const ateFood = head.x === this.food.x && head.y === this.food.y;
 
         if (ateFood) {
-            this.score += 10;
+            this.score += 1;
             this.generateFood();
             this.playEatAnimation();
         } else {
@@ -165,9 +166,15 @@ class GameState {
         this.updateUI();
     }
 
+    continueGame() {
+        this.startGame();
+    }
+    
     pauseGame() {
         this.isPlaying = false;
         this.clearGameInterval();
+        const pauseBtn = document.getElementById('pauseBtn');
+        pauseBtn.textContent = '继续';
         this.updateUI();
     }
 
@@ -215,13 +222,27 @@ class GameState {
         // 更新按钮状态
         const startBtn = document.getElementById('startBtn');
         const pauseBtn = document.getElementById('pauseBtn');
+        const endBtn = document.getElementById('endBtn');
         
         if (this.isPlaying) {
-            startBtn.disabled = true;
+            // 游戏进行中
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
             pauseBtn.disabled = false;
+            pauseBtn.textContent = '暂停';
+            endBtn.style.display = 'inline-block';
+        } else if (this.gameInterval !== null) {
+            // 游戏已暂停
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+            pauseBtn.disabled = false;
+            pauseBtn.textContent = '继续';
+            endBtn.style.display = 'inline-block';
         } else {
-            startBtn.disabled = false;
-            pauseBtn.disabled = true;
+            // 游戏未开始
+            startBtn.style.display = 'inline-block';
+            pauseBtn.style.display = 'none';
+            endBtn.style.display = 'none';
         }
         
         // 更新音效按钮状态
@@ -229,6 +250,11 @@ class GameState {
         if (soundBtn) {
             soundBtn.textContent = soundManager.enabled ? '🔊 音效开' : '🔇 音效关';
         }
+    }
+    
+    endGame() {
+        this.gameOver();
+        this.resetGame();
     }
 
     updateSpeedButtons() {
@@ -288,8 +314,15 @@ class Renderer {
     constructor(gameState) {
         this.gameState = gameState;
         this.canvas = document.getElementById('gameCanvas');
+        console.log('Canvas元素:', this.canvas);
         this.ctx = this.canvas.getContext('2d');
+        console.log('Canvas上下文:', this.ctx);
+        if (!this.ctx) {
+            console.error('无法获取Canvas 2D上下文');
+            return;
+        }
         this.initCanvas();
+        console.log('Canvas初始化完成，尺寸:', this.canvas.width, 'x', this.canvas.height);
     }
 
     initCanvas() {
@@ -382,12 +415,12 @@ class Renderer {
 // 游戏初始化
 let gameState;
 let renderer;
-let soundManager;
+// soundManager 已在 sounds.js 中定义，无需重复声明
 
 function initGame() {
     gameState = new GameState();
     renderer = new Renderer(gameState);
-    soundManager = new SoundManager();
+    // soundManager 已在 sounds.js 中创建全局实例，无需重新创建
     
     // 绑定事件
     bindEvents();
@@ -421,12 +454,15 @@ function bindEvents() {
     });
     
     document.getElementById('pauseBtn').addEventListener('click', () => {
-        gameState.pauseGame();
+        if (gameState.isPlaying) {
+            gameState.pauseGame();
+        } else {
+            gameState.continueGame();
+        }
     });
     
-    document.getElementById('resetBtn').addEventListener('click', () => {
-        gameState.resetGame();
-        renderer.render();
+    document.getElementById('endBtn').addEventListener('click', () => {
+        gameState.endGame();
     });
     
     // 速度按钮
@@ -436,13 +472,62 @@ function bindEvents() {
         });
     });
     
-    // 触摸事件
-    const controlBtns = document.querySelectorAll('.control-btn');
-    controlBtns.forEach(btn => {
-        btn.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-            btn.click();
+    // 终极移动端触摸解决方案
+    function setupMobileControls() {
+        console.log('初始化移动端控制...');
+        const buttons = [
+            ...document.querySelectorAll('.control-btn'),
+            ...document.querySelectorAll('.action-btn'), 
+            ...document.querySelectorAll('.speed-btn')
+        ];
+        
+        console.log(`找到 ${buttons.length} 个按钮`);
+        
+        buttons.forEach(btn => {
+            if (!btn) {
+                console.error('无效按钮元素');
+                return;
+            }
+            
+            console.log(`设置按钮: ${btn.id || btn.className}`);
+            
+            // 移除旧事件监听
+            btn.removeEventListener('touchstart', handleTouchStart);
+            btn.removeEventListener('touchend', handleTouchEnd);
+            
+            // 添加新事件监听
+            btn.addEventListener('touchstart', handleTouchStart, {passive: false});
+            btn.addEventListener('touchend', handleTouchEnd, {passive: false});
+            btn.style.touchAction = 'manipulation';
         });
+        
+        function handleTouchStart(e) {
+            e.preventDefault();
+            console.log(`触摸开始: ${e.target.id || e.target.className}`);
+            const btn = e.currentTarget;
+            btn.classList.add('active-touch');
+            
+            // 立即触发点击
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            btn.dispatchEvent(clickEvent);
+        }
+        
+        function handleTouchEnd(e) {
+            e.preventDefault();
+            const btn = e.currentTarget;
+            btn.classList.remove('active-touch');
+        }
+    }
+    
+    // 初始化时和DOM变化后都重新设置
+    setupMobileControls();
+    new MutationObserver(setupMobileControls).observe(document.body, {
+        childList: true,
+        subtree: true
     });
     
     // 音效控制按钮
@@ -465,4 +550,35 @@ function gameLoop() {
 }
 
 // 启动游戏
-document.addEventListener('DOMContentLoaded', initGame);
+function debugElements() {
+    console.log('调试元素状态:');
+    console.log('开始按钮:', document.getElementById('startBtn'));
+    console.log('暂停按钮:', document.getElementById('pauseBtn'));
+    console.log('方向按钮:', document.querySelectorAll('.control-btn'));
+    console.log('Canvas:', document.getElementById('gameCanvas'));
+    console.log('Canvas上下文:', document.getElementById('gameCanvas')?.getContext('2d'));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM已加载，开始初始化游戏...');
+    debugElements();
+    try {
+        initGame();
+        console.log('游戏初始化完成');
+        debugElements();
+        
+        // 添加测试事件
+        const testBtn = document.getElementById('startBtn');
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                console.log('测试点击事件触发');
+            });
+            testBtn.addEventListener('touchstart', (e) => {
+                console.log('测试触摸事件触发');
+                e.preventDefault();
+            });
+        }
+    } catch (error) {
+        console.error('游戏初始化失败:', error);
+    }
+});
