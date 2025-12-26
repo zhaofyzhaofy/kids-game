@@ -247,7 +247,7 @@ class GameState {
         
         // 更新音效按钮状态
         const soundBtn = document.getElementById('soundBtn');
-        if (soundBtn) {
+        if (soundBtn && typeof soundManager !== 'undefined' && soundManager) {
             soundBtn.textContent = soundManager.enabled ? '🔊 音效开' : '🔇 音效关';
         }
     }
@@ -305,7 +305,9 @@ class GameState {
                 foodElement.classList.remove('bounce');
             }, 600);
         }
-        soundManager.playSound('eat');
+        if (typeof soundManager !== 'undefined' && soundManager) {
+            soundManager.playSound('eat');
+        }
     }
 }
 
@@ -534,12 +536,17 @@ function bindEvents() {
     const soundBtn = document.createElement('button');
     soundBtn.className = 'action-btn';
     soundBtn.id = 'soundBtn';
-    soundBtn.textContent = soundManager.enabled ? '🔊 音效开' : '🔇 音效关';
-    soundBtn.addEventListener('click', () => {
-        const enabled = soundManager.toggleSound();
-        soundBtn.textContent = enabled ? '🔊 音效开' : '🔇 音效关';
-        soundManager.playSound('click');
-    });
+    if (typeof soundManager !== 'undefined' && soundManager) {
+        soundBtn.textContent = soundManager.enabled ? '🔊 音效开' : '🔇 音效关';
+        soundBtn.addEventListener('click', () => {
+            const enabled = soundManager.toggleSound();
+            soundBtn.textContent = enabled ? '🔊 音效开' : '🔇 音效关';
+            soundManager.playSound('click');
+        });
+    } else {
+        soundBtn.textContent = '🔇 音效关';
+        soundBtn.disabled = true;
+    }
     
     document.querySelector('.action-controls').appendChild(soundBtn);
 }

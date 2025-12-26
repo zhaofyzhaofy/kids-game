@@ -360,3 +360,191 @@ body {
 .flash {
     animation: flash 0.5s;
 }
+/* 模式切换按钮 */
+.mode-switch {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.mode-btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 25px;
+    background: #E0E0E0;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.mode-btn.active {
+    background: #FF6B6B;
+    color: white;
+    transform: scale(1.05);
+}
+
+.mode-btn:active {
+    transform: scale(0.95);
+}
+
+/* 计算器容器 */
+.calculator-container {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    max-width: 1000px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* 计算器显示区域 */
+.calculator-display {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: right;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.calculator-expression {
+    font-size: 1.2em;
+    opacity: 0.8;
+    margin-bottom: 10px;
+    min-height: 30px;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.calculator-result {
+    font-size: 3em;
+    font-weight: bold;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* 计算器按钮区域 */
+.calculator-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.calc-btn {
+    padding: 25px;
+    font-size: 1.8em;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: bold;
+    touch-action: manipulation;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+.calc-btn:active {
+    transform: scale(0.95);
+}
+
+/* 数字按钮 */
+.number-btn {
+    background: #4ECDC4;
+    color: white;
+    box-shadow: 0 4px 0 #3DB5AC;
+}
+
+.number-btn:active {
+    box-shadow: 0 2px 0 #3DB5AC;
+}
+
+/* 运算符按钮 */
+.operator-btn {
+    background: #FFD93D;
+    color: #333;
+    box-shadow: 0 4px 0 #E6C235;
+}
+
+.operator-btn:active {
+    box-shadow: 0 2px 0 #E6C235;
+}
+
+/* 功能按钮 */
+.func-btn {
+    background: #FF6B6B;
+    color: white;
+    box-shadow: 0 4px 0 #E55A5A;
+}
+
+.func-btn:active {
+    box-shadow: 0 2px 0 #E55A5A;
+}
+
+/* 等号按钮 */
+.equal-btn {
+    background: #00B894;
+    color: white;
+    box-shadow: 0 4px 0 #00A083;
+}
+
+.equal-btn:active {
+    box-shadow: 0 2px 0 #00A083;
+}
+
+/* 零按钮 */
+.zero-btn {
+    grid-column: span 2;
+}
+
+/* 计算器历史记录 */
+.calculator-history {
+    background: #F8F9FA;
+    border-radius: 15px;
+    padding: 20px;
+    border: 2px solid #FFD93D;
+}
+
+.calculator-history h3 {
+    color: #FF6B6B;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.4em;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .mode-btn {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    
+    .calculator-display {
+        min-height: 100px;
+        padding: 15px;
+    }
+    
+    .calculator-expression {
+        font-size: 1em;
+    }
+    
+    .calculator-result {
+        font-size: 2em;
+    }
+    
+    .calculator-buttons {
+        gap: 10px;
+    }
+    
+    .calc-btn {
+        padding: 20px;
+        font-size: 1.5em;
+    }
+}

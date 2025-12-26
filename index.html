@@ -8,6 +8,11 @@
     <script src="sounds.js"></script>
 </head>
 <body>
+    <div class="mode-switch">
+        <button class="mode-btn active" data-mode="game">🐍 贪吃蛇</button>
+        <button class="mode-btn" data-mode="calculator">🧮 计算器</button>
+    </div>
+
     <div class="game-container">
         <div class="game-header">
             <h1>🐍 小蛇吃果果 🍎</h1>
@@ -54,16 +59,75 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="calculator-container" id="calculatorContainer" style="display: none;">
+        <div class="calculator-display">
+            <div class="calculator-expression" id="calcExpression"></div>
+            <div class="calculator-result" id="calcResult">0</div>
+        </div>
+        
+        <div class="calculator-buttons">
+            <button class="calc-btn func-btn" data-action="clear">C</button>
+            <button class="calc-btn func-btn" data-action="delete">DEL</button>
+            <button class="calc-btn operator-btn" data-operator="%">%</button>
+            <button class="calc-btn operator-btn" data-operator="/">÷</button>
+            
+            <button class="calc-btn number-btn" data-number="7">7</button>
+            <button class="calc-btn number-btn" data-number="8">8</button>
+            <button class="calc-btn number-btn" data-number="9">9</button>
+            <button class="calc-btn operator-btn" data-operator="*">×</button>
+            
+            <button class="calc-btn number-btn" data-number="4">4</button>
+            <button class="calc-btn number-btn" data-number="5">5</button>
+            <button class="calc-btn number-btn" data-number="6">6</button>
+            <button class="calc-btn operator-btn" data-operator="-">-</button>
+            
+            <button class="calc-btn number-btn" data-number="1">1</button>
+            <button class="calc-btn number-btn" data-number="2">2</button>
+            <button class="calc-btn number-btn" data-number="3">3</button>
+            <button class="calc-btn operator-btn" data-operator="+">+</button>
+            
+            <button class="calc-btn number-btn zero-btn" data-number="0">0</button>
+            <button class="calc-btn number-btn" data-number=".">.</button>
+            <button class="calc-btn equal-btn" data-action="calculate">=</button>
+        </div>
+        
+        <div class="calculator-history">
+            <h3>📝 计算记录</h3>
+            <div id="calcHistoryList" class="history-list"></div>
         </div>
     </div>
 
+    <script src="calculator.js" defer></script>
     <script src="game.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             console.log('DOM已完全加载');
-        });
-        window.addEventListener('load', () => {
-            console.log('所有资源已加载');
+            
+            // 模式切换功能
+            const modeBtns = document.querySelectorAll('.mode-btn');
+            const gameContainer = document.querySelector('.game-container');
+            const calculatorContainer = document.getElementById('calculatorContainer');
+            
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const mode = btn.dataset.mode;
+                    
+                    // 更新按钮状态
+                    modeBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // 切换显示
+                    if (mode === 'game') {
+                        gameContainer.style.display = 'block';
+                        calculatorContainer.style.display = 'none';
+                    } else {
+                        gameContainer.style.display = 'none';
+                        calculatorContainer.style.display = 'block';
+                    }
+                });
+            });
         });
     </script>
 </body>

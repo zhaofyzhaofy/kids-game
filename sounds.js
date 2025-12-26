@@ -93,6 +93,126 @@ class SoundManager {
             this.enabled = savedPreference === 'true';
         }
     }
+
+    // 朗读数字
+    speakNumber(num) {
+        if (!this.enabled) return;
+        
+        // 检查浏览器是否支持语音合成
+        if (!('speechSynthesis' in window)) {
+            console.warn('浏览器不支持语音合成');
+            return;
+        }
+        
+        // 停止当前正在播放的语音
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance(num);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 0.8; // 语速稍慢，适合儿童
+        utterance.pitch = 1.5; // 音调更高，女声效果
+        utterance.volume = 1.0;
+        
+        // 尝试选择女声
+        const voices = window.speechSynthesis.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.lang.includes('zh') && 
+            (voice.name.includes('Female') || 
+             voice.name.includes('女') ||
+             voice.name.includes('Huihui') ||
+             voice.name.includes('Yaoyao') ||
+             voice.name.includes('Xiaoxiao') ||
+             voice.name.includes('Lili'))
+        );
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // 朗读运算符
+    speakOperator(op) {
+        if (!this.enabled) return;
+        
+        // 检查浏览器是否支持语音合成
+        if (!('speechSynthesis' in window)) {
+            console.warn('浏览器不支持语音合成');
+            return;
+        }
+        
+        // 停止当前正在播放的语音
+        window.speechSynthesis.cancel();
+        
+        const operatorNames = {
+            '+': '加',
+            '-': '减',
+            '*': '乘以',
+            '/': '除以',
+            '%': '取余'
+        };
+        
+        const text = operatorNames[op] || op;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 0.8;
+        utterance.pitch = 1.5; // 音调更高，女声效果
+        utterance.volume = 1.0;
+        
+        // 尝试选择女声
+        const voices = window.speechSynthesis.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.lang.includes('zh') && 
+            (voice.name.includes('Female') || 
+             voice.name.includes('女') ||
+             voice.name.includes('Huihui') ||
+             voice.name.includes('Yaoyao') ||
+             voice.name.includes('Xiaoxiao') ||
+             voice.name.includes('Lili'))
+        );
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
+
+    // 朗读等于号
+    speakEqual() {
+        if (!this.enabled) return;
+        
+        // 检查浏览器是否支持语音合成
+        if (!('speechSynthesis' in window)) {
+            console.warn('浏览器不支持语音合成');
+            return;
+        }
+        
+        // 停止当前正在播放的语音
+        window.speechSynthesis.cancel();
+        
+        const utterance = new SpeechSynthesisUtterance('等于');
+        utterance.lang = 'zh-CN';
+        utterance.rate = 0.8;
+        utterance.pitch = 1.5; // 音调更高，女声效果
+        utterance.volume = 1.0;
+        
+        // 尝试选择女声
+        const voices = window.speechSynthesis.getVoices();
+        const femaleVoice = voices.find(voice => 
+            voice.lang.includes('zh') && 
+            (voice.name.includes('Female') || 
+             voice.name.includes('女') ||
+             voice.name.includes('Huihui') ||
+             voice.name.includes('Yaoyao') ||
+             voice.name.includes('Xiaoxiao') ||
+             voice.name.includes('Lili'))
+        );
+        if (femaleVoice) {
+            utterance.voice = femaleVoice;
+        }
+        
+        window.speechSynthesis.speak(utterance);
+    }
 }
 
 // 全局音效管理器

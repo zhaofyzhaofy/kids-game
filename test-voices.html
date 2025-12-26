@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>测试可用语音</title>
+</head>
+<body>
+    <h1>可用的中文语音列表</h1>
+    <div id="voiceList"></div>
+    <script>
+        function getVoices() {
+            return new Promise((resolve) => {
+                let voices = window.speechSynthesis.getVoices();
+                if (voices.length) {
+                    resolve(voices);
+                } else {
+                    window.speechSynthesis.onvoiceschanged = () => {
+                        voices = window.speechSynthesis.getVoices();
+                        resolve(voices);
+                    };
+                }
+            });
+        }
+
+        getVoices().then(voices => {
+            const voiceList = document.getElementById('voiceList');
+            const chineseVoices = voices.filter(voice => voice.lang.includes('zh'));
+            
+            if (chineseVoices.length === 0) {
+                voiceList.innerHTML = '<p>未找到中文语音</p>';
+                return;
+            }
+            
+            let html = '<ul>';
+            chineseVoices.forEach((voice, index) => {
+                html += `<li>
+                    <strong>${index + 1}. ${voice.name}</strong><br>
+                    语言: ${voice.lang}<br>
+                    默认: ${voice.default ? '是' : '否'}<br>
+                    本地服务: ${voice.localService ? '是' : '否'}
+                </li>`;
+            });
+            html += '</ul>';
+            voiceList.innerHTML = html;
+        });
+    </script>
+</body>
+</html>
