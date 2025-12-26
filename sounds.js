@@ -223,11 +223,21 @@ class SoundManager {
 // 全局音效管理器
 const soundManager = new SoundManager();
 
-// 为按钮添加音效
+// 为按钮添加音效（排除计算器按钮）
 document.addEventListener('DOMContentLoaded', () => {
     const buttons = document.querySelectorAll('button');
     
     buttons.forEach(button => {
+        // 检查是否是计算器按钮
+        const isCalculatorBtn = button.classList.contains('calc-btn') || 
+                               button.closest('.calculator-container');
+        
+        // 计算器按钮不播放点击音效，只播放语音
+        if (isCalculatorBtn) {
+            return;
+        }
+        
+        // 其他按钮播放点击音效
         button.addEventListener('click', () => {
             soundManager.playSound('click');
         });
