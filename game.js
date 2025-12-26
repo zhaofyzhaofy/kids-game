@@ -15,10 +15,10 @@ class GameState {
         this.gameInterval = null;
         
         this.speedLevels = {
-            verySlow: 400,
-            slow: 300,
-            medium: 200,
-            fast: 150
+            verySlow: 600,
+            slow: 500,
+            medium: 400,
+            fast: 300
         };
         
         this.colors = {
