@@ -108,7 +108,7 @@ class SoundManager {
 
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'zh-CN';
-        utterance.rate = 0.8; // 语速稍慢，适合儿童
+        utterance.rate = 1.2; // 提高语速，加快响应
         utterance.pitch = 1.5; // 音调更高，女声效果
         utterance.volume = 1.0;
 
@@ -127,14 +127,19 @@ class SoundManager {
             utterance.voice = femaleVoice;
         }
 
-        // 语音播放结束后，处理队列中的下一个
+        // 语音播放结束后，立即处理队列中的下一个
         utterance.onend = () => {
-            this.processSpeechQueue();
+            // 使用 setTimeout 0 让浏览器有时间处理其他事件
+            setTimeout(() => {
+                this.processSpeechQueue();
+            }, 50); // 减少延迟到50ms
         };
 
         // 如果播放出错，也继续处理下一个
         utterance.onerror = () => {
-            this.processSpeechQueue();
+            setTimeout(() => {
+                this.processSpeechQueue();
+            }, 50);
         };
 
         window.speechSynthesis.speak(utterance);
@@ -153,9 +158,12 @@ class SoundManager {
         // 添加到队列
         this.speechQueue.push(num);
         
-        // 如果没有在播放，开始播放
+        // 如果没有在播放，立即开始播放
         if (!this.isSpeaking) {
-            this.processSpeechQueue();
+            // 使用 setTimeout 0 让浏览器有时间处理其他事件
+            setTimeout(() => {
+                this.processSpeechQueue();
+            }, 0);
         }
     }
 
@@ -182,9 +190,11 @@ class SoundManager {
         // 添加到队列
         this.speechQueue.push(text);
         
-        // 如果没有在播放，开始播放
+        // 如果没有在播放，立即开始播放
         if (!this.isSpeaking) {
-            this.processSpeechQueue();
+            setTimeout(() => {
+                this.processSpeechQueue();
+            }, 0);
         }
     }
 
@@ -201,9 +211,11 @@ class SoundManager {
         // 添加到队列
         this.speechQueue.push('等于');
         
-        // 如果没有在播放，开始播放
+        // 如果没有在播放，立即开始播放
         if (!this.isSpeaking) {
-            this.processSpeechQueue();
+            setTimeout(() => {
+                this.processSpeechQueue();
+            }, 0);
         }
     }
 }
