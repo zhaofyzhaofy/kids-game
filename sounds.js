@@ -3,6 +3,8 @@ class SoundManager {
     constructor() {
         this.sounds = {};
         this.enabled = true;
+        this.speechQueue = []; // 语音队列
+        this.isSpeaking = false; // 是否正在播放语音
         this.init();
     }
 
@@ -94,25 +96,22 @@ class SoundManager {
         }
     }
 
-    // 朗读数字
-    speakNumber(num) {
-        if (!this.enabled) return;
-        
-        // 检查浏览器是否支持语音合成
-        if (!('speechSynthesis' in window)) {
-            console.warn('浏览器不支持语音合成');
+    // 处理语音队列
+    processSpeechQueue() {
+        if (this.speechQueue.length === 0) {
+            this.isSpeaking = false;
             return;
         }
-        
-        // 停止当前正在播放的语音
-        window.speechSynthesis.cancel();
-        
-        const utterance = new SpeechSynthesisUtterance(num);
+
+        this.isSpeaking = true;
+        const text = this.speechQueue.shift();
+
+        const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'zh-CN';
         utterance.rate = 0.8; // 语速稍慢，适合儿童
         utterance.pitch = 1.5; // 音调更高，女声效果
         utterance.volume = 1.0;
-        
+
         // 尝试选择女声
         const voices = window.speechSynthesis.getVoices();
         const femaleVoice = voices.find(voice => 
@@ -127,8 +126,37 @@ class SoundManager {
         if (femaleVoice) {
             utterance.voice = femaleVoice;
         }
-        
+
+        // 语音播放结束后，处理队列中的下一个
+        utterance.onend = () => {
+            this.processSpeechQueue();
+        };
+
+        // 如果播放出错，也继续处理下一个
+        utterance.onerror = () => {
+            this.processSpeechQueue();
+        };
+
         window.speechSynthesis.speak(utterance);
+    }
+
+    // 朗读数字
+    speakNumber(num) {
+        if (!this.enabled) return;
+        
+        // 检查浏览器是否支持语音合成
+        if (!('speechSynthesis' in window)) {
+            console.warn('浏览器不支持语音合成');
+            return;
+        }
+        
+        // 添加到队列
+        this.speechQueue.push(num);
+        
+        // 如果没有在播放，开始播放
+        if (!this.isSpeaking) {
+            this.processSpeechQueue();
+        }
     }
 
     // 朗读运算符
@@ -141,9 +169,6 @@ class SoundManager {
             return;
         }
         
-        // 停止当前正在播放的语音
-        window.speechSynthesis.cancel();
-        
         const operatorNames = {
             '+': '加',
             '-': '减',
@@ -153,28 +178,14 @@ class SoundManager {
         };
         
         const text = operatorNames[op] || op;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.8;
-        utterance.pitch = 1.5; // 音调更高，女声效果
-        utterance.volume = 1.0;
         
-        // 尝试选择女声
-        const voices = window.speechSynthesis.getVoices();
-        const femaleVoice = voices.find(voice => 
-            voice.lang.includes('zh') && 
-            (voice.name.includes('Female') || 
-             voice.name.includes('女') ||
-             voice.name.includes('Huihui') ||
-             voice.name.includes('Yaoyao') ||
-             voice.name.includes('Xiaoxiao') ||
-             voice.name.includes('Lili'))
-        );
-        if (femaleVoice) {
-            utterance.voice = femaleVoice;
+        // 添加到队列
+        this.speechQueue.push(text);
+        
+        // 如果没有在播放，开始播放
+        if (!this.isSpeaking) {
+            this.processSpeechQueue();
         }
-        
-        window.speechSynthesis.speak(utterance);
     }
 
     // 朗读等于号
@@ -187,31 +198,13 @@ class SoundManager {
             return;
         }
         
-        // 停止当前正在播放的语音
-        window.speechSynthesis.cancel();
+        // 添加到队列
+        this.speechQueue.push('等于');
         
-        const utterance = new SpeechSynthesisUtterance('等于');
-        utterance.lang = 'zh-CN';
-        utterance.rate = 0.8;
-        utterance.pitch = 1.5; // 音调更高，女声效果
-        utterance.volume = 1.0;
-        
-        // 尝试选择女声
-        const voices = window.speechSynthesis.getVoices();
-        const femaleVoice = voices.find(voice => 
-            voice.lang.includes('zh') && 
-            (voice.name.includes('Female') || 
-             voice.name.includes('女') ||
-             voice.name.includes('Huihui') ||
-             voice.name.includes('Yaoyao') ||
-             voice.name.includes('Xiaoxiao') ||
-             voice.name.includes('Lili'))
-        );
-        if (femaleVoice) {
-            utterance.voice = femaleVoice;
+        // 如果没有在播放，开始播放
+        if (!this.isSpeaking) {
+            this.processSpeechQueue();
         }
-        
-        window.speechSynthesis.speak(utterance);
     }
 }
 
